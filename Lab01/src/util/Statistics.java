@@ -44,7 +44,7 @@ public class Statistics {
 	
 	// Normal generates normal distribution variates with average avg 
     //  and standard deviation std_dev
-	static double normal(double avg, double std_dev)
+	public static double normal(double avg, double std_dev)
 	{  
 		double U= avg+std_dev*normal();
 		return U;
@@ -72,7 +72,7 @@ public class Statistics {
 	
 	static double TINY =  Math.pow(10, -38);
 	// Exponential generates  exponiential distribution variates
-	static double exponential(double beta)
+	public static double exponential(double beta)
 	{  double U=random();
 	if (U<TINY)
 	  U=TINY;

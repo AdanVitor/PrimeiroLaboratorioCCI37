@@ -1,10 +1,13 @@
 package approaches.activity;
 
-import java.util.Arrays;
-
 import util.Statistics;
 
 public class Activity {
+	private static AvailableServices services = AvailableServices.sharedInstance();
+	private static Executive executive = Executive.sharedInstance();
+	private static QueueManager queueManager = QueueManager.sharedInstance();
+	private static DataCollector dataCollector = DataCollector.sharedInstance();
+
 	private final double CLIENT_ARRIVAL_MEAN = 5;
 	private final double ATM_MEAN = 4;
 	private final double ATM_VARIANCE = 2;
@@ -13,15 +16,11 @@ public class Activity {
 		ARRIVE_CLIENT,
 		END_ATM_SERVICE,
 	}
-	private Client client;  // acho que isso não é necessário!!
+	private Client client;
 	private double time;
 	private Type type;
-	private AvailableServices services = AvailableServices.sharedInstance();
-	private Executive executive = Executive.sharedInstance();
-	private QueueManager queueManager = new QueueManager();
 
-	public Activity(Client client, double time, Type type) {
-		this.client = client;
+	public Activity(double time, Type type) {
 		this.time = time;
 		this.type = type;
 	}
@@ -30,21 +29,23 @@ public class Activity {
 		double time1 = 0;
 		double simTime = executive.simulationTime();
 		if (type == Type.ARRIVE_CLIENT && time == simTime) {
-			Client client = new Client();
 			time1 = simTime + Statistics.exponential(CLIENT_ARRIVAL_MEAN);
-			executive.addActivity(new Activity(client, time1, Type.ARRIVE_CLIENT));
+			Client client = new Client(time1);
+			executive.addActivity(new Activity(time1, Type.ARRIVE_CLIENT));
 			queueManager.enqueueATMClient(client);
 		}
 	}
 
 	public void startATMService() {
-		double time1 = 0;
 		double simTime = executive.simulationTime();
-		if (services.isATMFree()) {
-			Client client = queueManager.dequeueATMClient();
+		if (services.isATMFree() && queueManager.peekATMClient() != null && queueManager.peekATMClient().arrive <= simTime) {
+			client = queueManager.dequeueATMClient();
 			if (client != null) {
-				time1 = simTime + Statistics.normal(ATM_MEAN, ATM_VARIANCE);
-				executive.addActivity(new Activity(client, time1, Type.END_ATM_SERVICE));
+				client.start = simTime;
+				time = simTime + Statistics.normal(ATM_MEAN, ATM_VARIANCE);
+				type = Type.END_ATM_SERVICE;
+				executive.addActivity(this);
+				services.makeOneATMBusy();
 			}
 		}
 	}
@@ -52,7 +53,9 @@ public class Activity {
 	public void endATMService () {
 		double simTime = executive.simulationTime();
 		if (type == Type.END_ATM_SERVICE && time == simTime) {
+			client.end = simTime;
 			services.freeFirstBusyATM();
+			dataCollector.addClient(client);
 		}
 	}
 
@@ -86,15 +89,15 @@ public class Activity {
 
 	public void executeActivity () {
 		this.arriveClient();
-		this.arriveCall();
+//		this.arriveCall();
 		this.endATMService();
-		this.endCashierService();
-		this.endManagerService();
-		this.endCall();
+//		this.endCashierService();
+//		this.endManagerService();
+//		this.endCall();
 		this.startATMService();
-		this.startCashierService();
-		this.startManagerService();
-		this.startCall();
+//		this.startCashierService();
+//		this.startManagerService();
+//		this.startCall();
 	}
 	
 	public double getTime() {
@@ -102,12 +105,18 @@ public class Activity {
 	}
 
 	public static void main(String[] args) {
-		Activity activity = null;
-		Executive executive = Executive.sharedInstance();
+		double initialSimulationTime = 0;
+		Client firstClient = new Client(initialSimulationTime);
+		Activity activity = new Activity(initialSimulationTime, Type.ARRIVE_CLIENT);
+		queueManager.enqueueATMClient(firstClient);
+		executive.addActivity(activity);
 		while (!executive.isTimeFinished()) {
+//			System.out.println(executive.simulationTime());
 			activity = executive.getActivity();
 			activity.executeActivity();
 			executive.removeActivity();
 		}
+		
+		dataCollector.printClientStatistics();
 	}
 }

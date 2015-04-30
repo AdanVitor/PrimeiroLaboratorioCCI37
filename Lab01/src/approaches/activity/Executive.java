@@ -3,13 +3,16 @@ package approaches.activity;
 import java.util.TreeMap;
 
 public class Executive {
-	
+	private static final double END_SIMULATION_TIME = 24 * 60 * 60 * 30 * 12;  // Months in seconds.
+	                                            //    /    |     |    \    \
+	                                            // hours  mins  secs  days  months
 	private static Executive executive = null;
 	
 	private TreeMap<Double, Activity> activities = null;
+	private double maxTime = 0;
 	
 	private Executive() {
-		activities = new TreeMap<Double, Activity>();
+		activities = new TreeMap<>();
 	}
 
 	public static Executive sharedInstance() {
@@ -24,7 +27,7 @@ public class Executive {
 	}
 	
 	public boolean isTimeFinished() {
-		return activities.isEmpty();
+		return maxTime > END_SIMULATION_TIME;
 	}
 	
 	public Activity getActivity() {
@@ -36,6 +39,10 @@ public class Executive {
 	}
 
 	public void addActivity(Activity activity) {
-		activities.put(activity.getTime(), activity);
+		double activityTime = activity.getTime();
+		if (activityTime > maxTime) {
+			maxTime = activityTime;
+		}
+		activities.put(activityTime, activity);
 	}
 }

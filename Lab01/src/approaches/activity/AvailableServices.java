@@ -32,6 +32,15 @@ public class AvailableServices {
 		}
 		return freeSpot;
 	}
+	
+	public void makeOneATMBusy() {
+		for (int i = 0; i < atmFree.length; i++) {
+			if (atmFree[i]) {
+				atmFree[i] = false;
+				return;
+			}
+		}
+	}
 
 	public void freeFirstBusyATM() {
 		for (int i = 0; i < atmFree.length; i++) {

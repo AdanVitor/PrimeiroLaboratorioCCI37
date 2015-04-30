@@ -1,35 +1,54 @@
 package approaches.activity;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.TreeMap;
 
 public class QueueManager {
 	
-	private Deque<Client> atmQueue = new LinkedList<>();
-	private Deque<Client> cashierQueue = new LinkedList<>();
-	private Deque<Client> managerQueue = new LinkedList<>();
+	private static QueueManager queueManager = null;
+	
+	private TreeMap<Double, Client> atmQueue = new TreeMap<>();
+	private TreeMap<Double, Client> cashierQueue = new TreeMap<>();
+	private TreeMap<Double, Client> managerQueue = new TreeMap<>();
+	
+	private QueueManager () {}
+	
+	public static QueueManager sharedInstance() {
+		if (queueManager == null) {
+			queueManager = new QueueManager();
+		}
+		return queueManager;
+	}
 	
 	public Client dequeueATMClient() {
-		return atmQueue.poll();
+		if(atmQueue.size() == 0) {
+			return null;
+		}
+		
+		return atmQueue.remove(atmQueue.firstKey());
 	}
 	
 	public void enqueueATMClient(Client c) {
-		atmQueue.offer(c);
+		atmQueue.put(c.arrive, c);
+	}
+
+	public Client peekATMClient() {
+		return atmQueue.firstEntry().getValue();
 	}
 	
 	public Client dequeueCashierClient() {
-		return cashierQueue.poll();
+		return cashierQueue.firstEntry().getValue();
 	}
 	
 	public void enqueueCashierClient(Client c) {
-		cashierQueue.offer(c);
+		cashierQueue.put(c.arrive, c);
 	}
 	
 	public Client dequeueManagerClient() {
-		return managerQueue.poll();
+		return managerQueue.firstEntry().getValue();
 	}
 	
 	public void enqueueManagerClient(Client c) {
-		managerQueue.offer(c);
+		managerQueue.put(c.arrive, c);
 	}
+
 }
