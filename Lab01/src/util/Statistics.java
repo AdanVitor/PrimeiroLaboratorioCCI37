@@ -1,6 +1,10 @@
 package util;
 
+import java.util.ArrayList;
 import java.util.Random;
+
+import entities.*;
+
 
 public class Statistics {
 
@@ -114,7 +118,21 @@ public class Statistics {
 	
 	
 	// Statistic log
+	public static ArrayList<Entity> callAndClientsAttended = new ArrayList<Entity>();
+	public static ArrayList<Call> callsNotAttended = new ArrayList<Call>();
+	
+	public static ArrayList<Double> clientServiceTime = new ArrayList<Double>();
+	public static ArrayList<Double> clientWait = new ArrayList<Double>();
+	public static ArrayList<Double> clientTotalTime = new ArrayList<Double>();
+
 	public static double waitTime = 0;
 	public static int clientsNumber = 0;
+
+	public static void addInClientStatistics(Client client) {
+		clientServiceTime.add(client.endTime - client.startTime);
+		clientWait.add(client.startTime - client.arrivalTime);
+	    clientTotalTime.add(client.endTime - client.arrivalTime);
+		
+	}
 
 }
