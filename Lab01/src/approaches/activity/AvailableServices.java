@@ -61,6 +61,24 @@ public class AvailableServices {
 		return freeSpot;
 	}
 	
+	public void makeOneCashierBusy() {
+		for (int i = 0; i < cashierFree.length; i++) {
+			if (cashierFree[i]) {
+				cashierFree[i] = false;
+				return;
+			}
+		}
+	}
+
+	public void freeFirstBusyCashier() {
+		for (int i = 0; i < cashierFree.length; i++) {
+			if(!cashierFree[i]) {
+				cashierFree[i] = true;
+				return;
+			}
+		}
+	}
+	
 	public boolean isManagerFree() {
 		boolean freeSpot = false;
 		for (int i = 0; i < managerFree.length && !freeSpot; i++) {
@@ -69,5 +87,23 @@ public class AvailableServices {
 			}
 		}
 		return freeSpot;
+	}
+	
+	public void makeOneManagerBusy() {
+		for (int i = 0; i < managerFree.length; i++) {
+			if (managerFree[i]) {
+				managerFree[i] = false;
+				return;
+			}
+		}
+	}
+
+	public void freeFirstBusyManager() {
+		for (int i = 0; i < managerFree.length; i++) {
+			if(!managerFree[i]) {
+				managerFree[i] = true;
+				return;
+			}
+		}
 	}
 }
