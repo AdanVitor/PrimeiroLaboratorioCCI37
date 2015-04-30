@@ -23,6 +23,7 @@ public class ManagersController extends AttendantController{
 	public boolean queueIsEmpty(){
 		return clientQueue.isEmpty() && callQueue.isEmpty();
 	}
+	
 
 	@Override
 	public double getServiceTime() {

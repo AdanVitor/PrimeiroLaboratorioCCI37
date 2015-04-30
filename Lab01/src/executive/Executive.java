@@ -49,8 +49,7 @@ public class Executive {
 		}
 		while(!events.isEmpty() &&  Math.abs(events.get(0).time - simulationTime) < Epsilon){
 			Event event = events.remove(0);
-			boolean temp = debug && event.eventCode != EventConstants.CALL_END && event.eventCode != EventConstants.END_CLIENT_SERVICE
-					&&(event.entity instanceof Client);
+			boolean temp = debug && event.eventCode != EventConstants.CALL_END;
 			if(temp){
 				System.out.println("Atendant livre? " + event.atendantController.isFree() );
 				System.out.println("*Evento : " + EventConstants.printEvent(event.eventCode) + 
@@ -59,7 +58,8 @@ public class Executive {
 			event.entity.executeEvent(event.eventCode, event.atendantController);
 			
 			if(temp){
-				System.out.println("Tamanho da fila: " + event.atendantController.getQueueSize());
+				System.out.println("Tamanho da fila client: " + event.atendantController.getClientQueueSize());
+				System.out.println("Tamanho fila de ligações: " + event.atendantController.getCallQueueSize());
 				System.out.println("Cliente: chegada " + event.entity.arrivalTime +
 						" inicio de serviço: " + event.entity.startTime 
 						+ " fim de serviço: " + event.entity.endTime);
