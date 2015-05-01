@@ -21,7 +21,7 @@ public class Main {
 		AttendantController callAttendant = RaffleAttendantController
 				.getManagerController();
 
-		Executive.simulationEnd= 500;
+		Executive.simulationEnd= 1000000;
 		// simulations parameters are in Statistics.java
 		
 		
@@ -32,6 +32,7 @@ public class Main {
 			Executive.timeScan();
 			Executive.executeEvents();
 		}
+		Statistics.printStatisticsResult();
 	}
 
 }

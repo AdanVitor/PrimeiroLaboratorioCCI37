@@ -13,7 +13,7 @@ public class ManagersController extends AttendantController{
 	
 	public ManagersController(){
 		this.name = "Managers Controller";
-		this.attendantsNumber = 2;
+		this.attendantsNumber = 1;
 		for(int i = 0 ; i < attendantsNumber ;i++){
 			this.attendants.add(new Manager());
 		}

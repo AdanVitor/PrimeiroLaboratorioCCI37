@@ -2,6 +2,7 @@ package attendantsPackage;
 
 import java.util.ArrayList;
 
+import util.Statistics;
 import entities.Call;
 import entities.Client;
 
@@ -54,6 +55,10 @@ public abstract class AttendantController {
 		return clientQueue.remove(0);
 	}
 	
+	public Call removeCallOfQueue() {
+		return callQueue.remove(0);
+	}
+	
 	
 	public abstract double getServiceTime();
 	public int getClientQueueSize(){
@@ -73,6 +78,29 @@ public abstract class AttendantController {
 		}
 		
 	}
+	boolean isToPrintLostCalls;
+	
+	public void removeLostCalls(double startTime) {
+		double arrival = callQueue.get(0).arrivalTime;
+		while(!callQueue.isEmpty() && startTime - arrival > Statistics.getMaxCallWaiting){
+			printIfDebug("Tirando ligação perdida: chegada " + arrival + " atendimento: " + startTime);
+			Call call = callQueue.remove(0);
+			Statistics.addInLostCalls(call);
+			if(!callQueueIsEmpty()){
+				arrival = callQueue.get(0).arrivalTime;
+			}
+		}
+		
+	}
+	
+	boolean printToDebug = false;
+	public void printIfDebug(String message){
+		if(printToDebug){
+			System.out.println(message);
+		}
+	}
+
+	
 
 	
 

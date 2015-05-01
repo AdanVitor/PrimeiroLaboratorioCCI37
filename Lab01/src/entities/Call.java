@@ -25,28 +25,21 @@ public class Call extends Entity {
 	}
 
 	private void endCall(AttendantController attendantController) {
-		// TODO Auto-generated method stub
-		
+		Statistics.addInCallStatistics(this);
+		dealWithManager(attendantController);
 	}
 
 	private void arriveCall(AttendantController attendantController) {
 		addNewEventCallArrive();
 		if(attendantController.isFree() && attendantController.callQueueIsEmpty()){
 			attendantController.markAsBusy();
-			scheduleEndService(attendantController);
+			scheduleEndCall(attendantController, this);
 		}
 		else{
 			attendantController.addInCallQueue(this);
 		}
 	}
 	
-	private void scheduleEndService(AttendantController attendantController){
-		double endCallTime = Executive.simulationTime + Statistics.getCallDuration();
-		this.startTime = Executive.simulationTime;
-		this.endTime = endCallTime;
-		Executive.addEvent(endCallTime, EventConstants.CALL_END,
-				this, attendantController);
-	}
 	
 	private void addNewEventCallArrive(){
 		double nextCallTime = Statistics.getNextCallArrival(Executive.simulationTime);
