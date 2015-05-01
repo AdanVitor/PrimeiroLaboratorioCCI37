@@ -206,6 +206,9 @@ public class Activity {
 		double initialSimulationTime = 0;
 		Client firstClient = new Client(initialSimulationTime);
 		chooseClientQueue(firstClient);
+		Call firstCall = new Call(initialSimulationTime);
+		queueManager.enqueueManagerCall(firstCall);
+		
 		Activity activity = new Activity(initialSimulationTime, Type.ARRIVE_CLIENT);
 		executive.addActivity(activity);
 		activity = new Activity(initialSimulationTime + 0.001, Type.ARRIVE_CALL);
@@ -218,5 +221,6 @@ public class Activity {
 		}
 
 		dataCollector.printClientStatistics();
+		dataCollector.printCallStatistics();
 	}
 }

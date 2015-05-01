@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class AvailableServices {
 	private static AvailableServices services = null;
-	private final int AVAILABLE_UNITS = 2;
+	private final int AVAILABLE_UNITS = 1;
 
 	private Boolean[] atmFree = new Boolean[AVAILABLE_UNITS];
 	private Boolean[] cashierFree = new Boolean[AVAILABLE_UNITS];
