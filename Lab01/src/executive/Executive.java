@@ -5,8 +5,7 @@ import java.util.ArrayList;
 
 
 
-import util.Statistics;
-import entities.Client;
+
 import entities.Entity;
 import attendantsPackage.AttendantController;
 
@@ -43,24 +42,26 @@ public class Executive {
 	static boolean debug = true;
 	static double Epsilon = Math.pow(10, -7);
 	
+	private static boolean debugPrint = false;
+	
 	public static void executeEvents() {
 		if(debug){
-			System.out.println("-------------Execute Event -------------");
+			printIfDebugPrint("-------------Execute Event -------------");
 		}
 		while(!events.isEmpty() &&  Math.abs(events.get(0).time - simulationTime) < Epsilon){
 			Event event = events.remove(0);
-			boolean temp = debug && event.eventCode != EventConstants.CALL_END;
+			boolean temp = true;
 			if(temp){
-				System.out.println("Atendant livre? " + event.atendantController.isFree() );
-				System.out.println("*Evento : " + EventConstants.printEvent(event.eventCode) + 
+				printIfDebugPrint("Atendant livre? " + event.atendantController.isFree() );
+				printIfDebugPrint("*Evento : " + EventConstants.printEvent(event.eventCode) + 
 						"  *Attendant:  " + event.atendantController.name + "  *Tempo Evento: " + event.time);
 			}
 			event.entity.executeEvent(event.eventCode, event.atendantController);
 			
 			if(temp){
-				System.out.println("Tamanho da fila client: " + event.atendantController.getClientQueueSize());
-				System.out.println("Tamanho fila de ligações: " + event.atendantController.getCallQueueSize());
-				System.out.println("Cliente: chegada " + event.entity.arrivalTime +
+				printIfDebugPrint("Tamanho da fila client: " + event.atendantController.getClientQueueSize());
+				printIfDebugPrint("Tamanho fila de ligações: " + event.atendantController.getCallQueueSize());
+				printIfDebugPrint("Cliente: chegada " + event.entity.arrivalTime +
 						" inicio de serviço: " + event.entity.startTime 
 						+ " fim de serviço: " + event.entity.endTime);
 			}
@@ -68,6 +69,11 @@ public class Executive {
 		
 	}
 	
+	public static void printIfDebugPrint(String message){
+		if(debugPrint){
+			System.out.println(message);
+		}
+	}
 	
 	
 }

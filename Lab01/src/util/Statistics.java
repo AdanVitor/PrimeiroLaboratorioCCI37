@@ -3,7 +3,11 @@ package util;
 import java.util.ArrayList;
 import java.util.Random;
 
+
+
+
 import entities.*;
+import executive.Executive;
 
 
 public class Statistics {
@@ -116,22 +120,58 @@ public class Statistics {
 		return uniform(callDurationMin, callDurationMax);
 	}
 	
+	public static final double getMaxCallWaiting = 10;
+	
 	
 	// Statistic log
 	public static ArrayList<Entity> callAndClientsAttended = new ArrayList<Entity>();
 	public static ArrayList<Call> callsNotAttended = new ArrayList<Call>();
 	
 	public static ArrayList<Double> clientServiceTime = new ArrayList<Double>();
-	public static ArrayList<Double> clientWait = new ArrayList<Double>();
+	public static ArrayList<Double> clientWaitingTime = new ArrayList<Double>();
 	public static ArrayList<Double> clientTotalTime = new ArrayList<Double>();
+	
+	public static ArrayList<Double> callDurationTime = new ArrayList<Double>();
+	public static ArrayList<Double> callWaitingTime = new ArrayList<Double>();
+	public static ArrayList<Double> callTotalTime = new ArrayList<Double>();
 
 	public static double waitTime = 0;
 	public static int clientsNumber = 0;
+	public static int lostCallsNumber = 0;
+	
+	public static void addInLostCalls(Call lostCall){
+		lostCallsNumber++;
+	}
 
 	public static void addInClientStatistics(Client client) {
-		clientServiceTime.add(client.endTime - client.startTime);
-		clientWait.add(client.startTime - client.arrivalTime);
-	    clientTotalTime.add(client.endTime - client.arrivalTime);
+		addInStatistics(client, clientServiceTime,clientWaitingTime , clientTotalTime);
+	}
+
+	public static void addInCallStatistics(Call call) {
+		addInStatistics(call, callDurationTime, callWaitingTime, callTotalTime);
+	}
+	
+	public static void addInStatistics (Entity entity , ArrayList<Double> serviceTime, ArrayList<Double> waitingTime, ArrayList<Double> totalTime){
+		serviceTime.add(entity.endTime - entity.startTime);
+		waitingTime.add(entity.startTime - entity.arrivalTime);
+	    totalTime.add(entity.endTime - entity.arrivalTime);
+	}
+	
+	
+	public static void printStatisticsResult(){
+		System.out.println("\n\n####################################\n\n");
+		System.out.println("Resultados estatístico: ");
+		System.out.println("Ligações perdidas: " + lostCallsNumber/ (Executive.simulationTime/(60*24)) + " por dia");
+		double callWaiting = 0;
+		for (Double value : callWaitingTime){
+			callWaiting += value;
+		}
+		System.out.println("Tempo médio de espera ligação: " + callWaiting/callWaitingTime.size());
+		double clientWaiting = 0;
+		for (Double value : clientWaitingTime){
+			clientWaiting += value;
+		}
+		System.out.println("Tempo médio de espera cliente: " + clientWaiting/clientWaitingTime.size());
 		
 	}
 
