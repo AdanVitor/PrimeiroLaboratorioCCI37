@@ -4,11 +4,12 @@ import util.Statistics;
 
 public class EletronicCashsController extends AttendantController {
 	
+	public static int eletronicCashAttendants = 2;
 	// É SÓ UMA FILA PARA CADA TIPO DE ATENDIMENTO!!!!
 	public EletronicCashsController(){
+		
 		this.name = "EletronicCashsController ";
-		this.attendantsNumber = 1;
-		for(int i = 0 ; i < attendantsNumber ;i++){
+		for(int i = 0 ; i < eletronicCashAttendants ;i++){
 			this.attendants.add(new EletronicCash());
 		}
 	}

@@ -11,10 +11,11 @@ public class ManagersController extends AttendantController{
 	
 	public ArrayList<Call> callQueue = new ArrayList<Call>();
 	
+	public static int managersAttendant = 2;
+	
 	public ManagersController(){
 		this.name = "Managers Controller";
-		this.attendantsNumber = 1;
-		for(int i = 0 ; i < attendantsNumber ;i++){
+		for(int i = 0 ; i < managersAttendant ;i++){
 			this.attendants.add(new Manager());
 		}
 	}

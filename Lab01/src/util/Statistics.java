@@ -159,19 +159,32 @@ public class Statistics {
 	
 	
 	public static void printStatisticsResult(){
-		System.out.println("\n\n####################################\n\n");
+		System.out.println("\n####################################\n");
 		System.out.println("Resultados estatístico: ");
 		System.out.println("Ligações perdidas: " + lostCallsNumber/ (Executive.simulationTime/(60*24)) + " por dia");
-		double callWaiting = 0;
-		for (Double value : callWaitingTime){
-			callWaiting += value;
+		double callWaiting = 0 , callDuration = 0 , callTime = 0;
+		for(int i = 0 ; i < callWaitingTime.size() ;i++){
+			callWaiting += callWaitingTime.get(i);
+			callDuration += callDurationTime.get(i);
+			callTime += callTotalTime.get(i);
+			
 		}
-		System.out.println("Tempo médio de espera ligação: " + callWaiting/callWaitingTime.size());
-		double clientWaiting = 0;
-		for (Double value : clientWaitingTime){
-			clientWaiting += value;
+		System.out.println("\n ------- Call statistics ----------- \n");
+		System.out.println("Tempo médio de espera ligação: " + callWaiting/callWaitingTime.size() + " minutos");
+		System.out.println("Tempo médio de duração ligação: " + callDuration/callDurationTime.size() + " minutos");
+		System.out.println("Tempo médio total ligação: " + callTime/callTotalTime.size() + " minutos");
+		
+		double clientWaiting = 0 , clientService = 0 , clientTotal = 0;
+
+		for (int i = 0 ; i < clientWaitingTime.size() ; i++){
+			clientWaiting += clientWaitingTime.get(i);
+			clientService += clientServiceTime.get(i);
+			clientTotal += clientTotalTime.get(i);
 		}
-		System.out.println("Tempo médio de espera cliente: " + clientWaiting/clientWaitingTime.size());
+	    System.out.println("\n ------- Client statistics ----------- \n");
+		System.out.println("Tempo médio de espera cliente: " + clientWaiting/clientWaitingTime.size() + " minutos");
+		System.out.println("Tempo médio de serviço cliente: " + clientService/clientServiceTime.size() + " minutos");
+		System.out.println("Tempo médio total cliente: " + clientTotal/clientTotalTime.size() + " minutos");
 		
 	}
 

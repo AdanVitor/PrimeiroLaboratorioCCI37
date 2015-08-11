@@ -3,12 +3,20 @@ package main;
 import util.RaffleAttendantController;
 import util.Statistics;
 import attendantsPackage.AttendantController;
+import attendantsPackage.CashsController;
+import attendantsPackage.EletronicCashsController;
+import attendantsPackage.ManagersController;
 import entities.*;
 import executive.*;
 
 public class Main {
 
 	public static void main(String[] args) {
+		int attendantsNumber = 1;
+		ManagersController.managersAttendant = attendantsNumber ;
+		CashsController.cashAttendants = attendantsNumber ;
+		EletronicCashsController.eletronicCashAttendants = attendantsNumber ;
+		
 		
 		double nextTimeClient = Statistics.getNextClientArrival(0);
 		Client firstClient = new Client(nextTimeClient);
@@ -21,7 +29,8 @@ public class Main {
 		AttendantController callAttendant = RaffleAttendantController
 				.getManagerController();
 
-		Executive.simulationEnd= 1000000;
+		int monthsNumber = 2;
+		Executive.simulationEnd= monthsNumber*30*24*60;
 		// simulations parameters are in Statistics.java
 		
 		
