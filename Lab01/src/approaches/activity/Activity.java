@@ -16,7 +16,7 @@ public class Activity {
 	private static final double PAYMENT_AND_PLAY_VARIANCE = 2;
 
 
-	private static final double paymentPorcentage = 0.1;
+	private static final double paymentPorcentage = 0.3;
 	private static final double playAndPaymentPorcentage = 0.4;
 
 	private static AvailableServices services = AvailableServices
@@ -44,7 +44,7 @@ public class Activity {
 		if (random < paymentPorcentage) {
 			if (!queueManager.paymentQueueIsEmpty()
 					&& queueManager.playQueueIsEmpty()) {
-				queueManager.enqueuePlayClient(client);
+				queueManager.enqueuePaymentClient(client);
 			} else {
 				queueManager.enqueuePaymentClient(client);
 			}
@@ -58,7 +58,7 @@ public class Activity {
 		} else {
 			if (!queueManager.playQueueIsEmpty()
 					&& queueManager.paymentQueueIsEmpty()) {
-				queueManager.enqueuePaymentClient(client);
+				queueManager.enqueuePlayClient(client);
 			}else{
 				queueManager.enqueuePlayClient(client);
 			}
@@ -85,9 +85,7 @@ public class Activity {
 		if (services.isPaymentCashFree()) {
 			if(isClientWaiting(queueManager.peekPaymentClient(), simTime)){
 				configureEndPaymentCashService(simTime, queueManager.dequeuePaymentQueue(), Type.END_PAYMENT_CASH_SERVICE);
-			} else if (isClientWaiting(queueManager.peekPlayClient(), simTime)) {
-				configureEndPaymentCashService(simTime, queueManager.dequeuePlayQueue(), Type.END_PAYMENT_CASH_SERVICE);	
-			}
+			} 
 		}
 	}
 	
@@ -96,9 +94,7 @@ public class Activity {
 		if (services.isPlayCashFree()) {
 			if(isClientWaiting(queueManager.peekPlayClient(), simTime)){
 				configureEndPlayCashService(simTime, queueManager.dequeuePlayQueue(), Type.END_PLAY_CASH_SERVICE);
-			} else if (isClientWaiting(queueManager.peekPaymentClient(), simTime)) {
-				configureEndPlayCashService(simTime, queueManager.dequeuePaymentQueue(), Type.END_PLAY_CASH_SERVICE);	
-			}
+			} 
 		}
 	}
 	
