@@ -3,7 +3,7 @@ package approaches.activity;
 import java.util.TreeMap;
 
 public class Executive {
-	private static final double END_SIMULATION_TIME = 24 * 60 * 30 * 2;  // Months in minutes.
+	private static final double END_SIMULATION_TIME = 24 * 60 * 1 * 1;  // Months in minutes.
 	                                            //    /    |     \    \
 	                                            // hours  mins  days  months
 	private static Executive executive = null;

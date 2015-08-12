@@ -35,6 +35,7 @@ public class DataCollector {
 			System.out.println("Number of clients: " + listSize);
 		}
 
+
 	}
 
 	public void addClient(Client client) {
@@ -43,13 +44,5 @@ public class DataCollector {
 
 	public void printClientStatistics() {
 		printStatisticsForList(clientList);
-	}
-	
-	public void printCallStatistics() {
-		printStatisticsForList(callList);
-	}
-
-	public void addCall(Call call) {
-		callList.add(call);
 	}
 }

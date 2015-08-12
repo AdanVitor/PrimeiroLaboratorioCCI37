@@ -3,17 +3,18 @@ package approaches.activity;
 import java.util.Arrays;
 
 public class AvailableServices {
+	
 	private static AvailableServices services = null;
 	private final int AVAILABLE_UNITS = 1;
 
-	private Boolean[] atmFree = new Boolean[AVAILABLE_UNITS];
-	private Boolean[] cashierFree = new Boolean[AVAILABLE_UNITS];
-	private Boolean[] managerFree = new Boolean[AVAILABLE_UNITS];
+	private Boolean[] paymentCashFree = new Boolean[AVAILABLE_UNITS];
+	private Boolean[] playCashFree = new Boolean[AVAILABLE_UNITS];
+	
 
 	private AvailableServices() {
-		Arrays.fill(atmFree, true);
-		Arrays.fill(cashierFree, true);
-		Arrays.fill(managerFree, true);
+		Arrays.fill(paymentCashFree, true);
+		Arrays.fill(playCashFree, true);
+		
 	}
 	
 	public static AvailableServices sharedInstance() {
@@ -23,87 +24,62 @@ public class AvailableServices {
 		return services;
 	}
 	
-	public boolean isATMFree() {
+	public boolean isPaymentCashFree() {
 		boolean freeSpot = false;
-		for (int i = 0; i < atmFree.length && !freeSpot; i++) {
-			if (atmFree[i]) {
+		for (int i = 0; i < paymentCashFree.length && !freeSpot; i++) {
+			if (paymentCashFree[i]) {
 				freeSpot = true;
 			}
 		}
 		return freeSpot;
 	}
 	
-	public void makeOneATMBusy() {
-		for (int i = 0; i < atmFree.length; i++) {
-			if (atmFree[i]) {
-				atmFree[i] = false;
+	public void makeOnePaymentCashBusy() {
+		for (int i = 0; i < paymentCashFree.length; i++) {
+			if (paymentCashFree[i]) {
+				paymentCashFree[i] = false;
 				return;
 			}
 		}
 	}
 
-	public void freeFirstBusyATM() {
-		for (int i = 0; i < atmFree.length; i++) {
-			if(!atmFree[i]) {
-				atmFree[i] = true;
+	public void freeFirstBusyPaymentCash() {
+		for (int i = 0; i < paymentCashFree.length; i++) {
+			if(!paymentCashFree[i]) {
+				paymentCashFree[i] = true;
 				return;
 			}
 		}
 	}
 	
-	public boolean isCashierFree() {
+	//------------------------------------------------------------------------------------
+	
+	public boolean isPlayCashFree() {
 		boolean freeSpot = false;
-		for (int i = 0; i < cashierFree.length && !freeSpot; i++) {
-			if (cashierFree[i]) {
+		for (int i = 0; i < playCashFree.length && !freeSpot; i++) {
+			if (playCashFree[i]) {
 				freeSpot = true;
 			}
 		}
 		return freeSpot;
 	}
 	
-	public void makeOneCashierBusy() {
-		for (int i = 0; i < cashierFree.length; i++) {
-			if (cashierFree[i]) {
-				cashierFree[i] = false;
+	public void makeOnePlayCashBusy() {
+		for (int i = 0; i < playCashFree.length; i++) {
+			if (playCashFree[i]) {
+				playCashFree[i] = false;
 				return;
 			}
 		}
 	}
 
-	public void freeFirstBusyCashier() {
-		for (int i = 0; i < cashierFree.length; i++) {
-			if(!cashierFree[i]) {
-				cashierFree[i] = true;
-				return;
-			}
-		}
-	}
-	
-	public boolean isManagerFree() {
-		boolean freeSpot = false;
-		for (int i = 0; i < managerFree.length && !freeSpot; i++) {
-			if (managerFree[i]) {
-				freeSpot = true;
-			}
-		}
-		return freeSpot;
-	}
-	
-	public void makeOneManagerBusy() {
-		for (int i = 0; i < managerFree.length; i++) {
-			if (managerFree[i]) {
-				managerFree[i] = false;
+	public void freeFirstBusyPlayCash() {
+		for (int i = 0; i < playCashFree.length; i++) {
+			if(!playCashFree[i]) {
+				playCashFree[i] = true;
 				return;
 			}
 		}
 	}
 
-	public void freeFirstBusyManager() {
-		for (int i = 0; i < managerFree.length; i++) {
-			if(!managerFree[i]) {
-				managerFree[i] = true;
-				return;
-			}
-		}
-	}
 }

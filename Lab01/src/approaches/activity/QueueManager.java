@@ -6,10 +6,9 @@ public class QueueManager {
 	
 	private static QueueManager queueManager = null;
 	
-	private TreeMap<Double, Client> atmQueue = new TreeMap<>();
-	private TreeMap<Double, Client> cashierQueue = new TreeMap<>();
-	private TreeMap<Double, Client> managerQueue = new TreeMap<>();
-	private TreeMap<Double, Call> managerCallQueue = new TreeMap<>();
+	private TreeMap<Double, Client> playQueue = new TreeMap<>();
+	private TreeMap<Double, Client> paymentQueue = new TreeMap<>();
+	
 	
 	private QueueManager () {}
 	
@@ -20,68 +19,44 @@ public class QueueManager {
 		return queueManager;
 	}
 	
-	public Client dequeueATMClient() {
-		if(atmQueue.size() == 0) {
+	public Client dequeuePaymentQueue() {
+		if(paymentQueue.size() == 0) {
 			return null;
 		}
 		
-		return atmQueue.remove(atmQueue.firstKey());
+		return paymentQueue.remove(paymentQueue.firstKey());
+	}
+	public void enqueuePaymentClient(Client c) {
+		paymentQueue.put(c.arrive, c);
 	}
 	
-	public void enqueueATMClient(Client c) {
-		atmQueue.put(c.arrive, c);
-	}
-
-	public Client peekATMClient() {
-		return atmQueue.firstEntry() == null ? null : atmQueue.firstEntry().getValue();
+	public Client peekPaymentClient() {
+		return paymentQueue.firstEntry() == null ? null : paymentQueue.firstEntry().getValue();
 	}
 	
-	public Client dequeueCashierClient() {
-		if(cashierQueue.size() == 0) {
+	public boolean paymentQueueIsEmpty(){
+		return paymentQueue.size() == 0;
+	}
+	
+	//------------------------------------------------------------------------------------------------
+	
+	public Client dequeuePlayQueue() {
+		if(playQueue.size() == 0) {
 			return null;
 		}
 		
-		return cashierQueue.remove(cashierQueue.firstKey());
+		return playQueue.remove(playQueue.firstKey());
 	}
 	
-	public void enqueueCashierClient(Client c) {
-		cashierQueue.put(c.arrive, c);
-	}
-	
-	public Client peekCashierClient() {
-		return cashierQueue.firstEntry() == null ? null : cashierQueue.firstEntry().getValue();
+	public void enqueuePlayClient(Client c) {
+		playQueue.put(c.arrive, c);
 	}
 
-	public Client dequeueManagerClient() {
-		if(managerQueue.size() == 0) {
-			return null;
-		}
-		
-		return managerQueue.remove(managerQueue.firstKey());
+	public Client peekPlayClient() {
+		return playQueue.firstEntry() == null ? null : playQueue.firstEntry().getValue();
 	}
 	
-	public void enqueueManagerClient(Client c) {
-		managerQueue.put(c.arrive, c);
+	public boolean playQueueIsEmpty(){
+		return playQueue.size() == 0;
 	}
-	
-	public Client peekManagerClient() {
-		return managerQueue.firstEntry() == null ? null : managerQueue.firstEntry().getValue();
-	}
-
-	public Call dequeueManagerCall() {
-		if(managerCallQueue.size() == 0) {
-			return null;
-		}
-		
-		return managerCallQueue.remove(managerCallQueue.firstKey());
-	}
-	
-	public void enqueueManagerCall(Call c) {
-		managerCallQueue.put(c.arrive, c);
-	}
-	
-	public Call peekManagerCall() {
-		return managerCallQueue.firstEntry() == null ? null : managerCallQueue.firstEntry().getValue();
-	}
-
 }
