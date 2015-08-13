@@ -4,14 +4,21 @@ import java.util.Arrays;
 
 public class AvailableServices {
 	
+	private static boolean isUnique = true;
+	
 	private static AvailableServices services = null;
-	private final int AVAILABLE_UNITS = 1;
+	private static int AVAILABLE_UNITS = 1;
 
 	private Boolean[] paymentCashFree = new Boolean[AVAILABLE_UNITS];
 	private Boolean[] playCashFree = new Boolean[AVAILABLE_UNITS];
 	
 
 	private AvailableServices() {
+		if(isUnique){
+			AvailableServices.AVAILABLE_UNITS = 2;
+			paymentCashFree = new Boolean[AVAILABLE_UNITS];
+			playCashFree = new Boolean[AVAILABLE_UNITS];
+		}
 		Arrays.fill(paymentCashFree, true);
 		Arrays.fill(playCashFree, true);
 		
@@ -21,8 +28,11 @@ public class AvailableServices {
 		if (services == null) {
 			services = new AvailableServices();
 		}
+		
 		return services;
 	}
+	
+	
 	
 	public boolean isPaymentCashFree() {
 		boolean freeSpot = false;

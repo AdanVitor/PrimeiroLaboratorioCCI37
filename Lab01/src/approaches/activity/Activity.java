@@ -16,7 +16,7 @@ public class Activity {
 	private static final double PAYMENT_AND_PLAY_VARIANCE = 2;
 
 
-	private static final double paymentPorcentage = 0.1;
+	private static final double paymentPorcentage = 0.3;
 	private static final double playAndPaymentPorcentage = 0.4;
 
 	private static AvailableServices services = AvailableServices
@@ -25,6 +25,8 @@ public class Activity {
 	private static Executive executive = Executive.sharedInstance();
 	private static QueueManager queueManager = QueueManager.sharedInstance();
 	private static DataCollector dataCollector = DataCollector.sharedInstance();
+	
+	private static boolean isUniqueQueue = true;
 
 	private enum Type {
 		ARRIVE_CLIENT, END_PAYMENT_CASH_SERVICE, END_PLAY_CASH_SERVICE
@@ -42,12 +44,18 @@ public class Activity {
 	private static void chooseClientQueue(Client client) {
 		double random = Math.random();
 		if (random < paymentPorcentage) {
-			if (!queueManager.paymentQueueIsEmpty()
-					&& queueManager.playQueueIsEmpty()) {
-				queueManager.enqueuePlayClient(client);
-			} else {
+			if(!isUniqueQueue){
+				if (!queueManager.paymentQueueIsEmpty()
+						&& queueManager.playQueueIsEmpty()) {
+					queueManager.enqueuePlayClient(client);
+				} else {
+					queueManager.enqueuePaymentClient(client);
+				}
+			}
+			else{
 				queueManager.enqueuePaymentClient(client);
 			}
+			
 			// sort another random to choose the client category
 			random = Math.random();
 			if (random < playAndPaymentPorcentage) {
@@ -56,12 +64,18 @@ public class Activity {
 				client.type = Client.Type.PAYMENT;
 			}
 		} else {
-			if (!queueManager.playQueueIsEmpty()
-					&& queueManager.paymentQueueIsEmpty()) {
-				queueManager.enqueuePaymentClient(client);
-			}else{
-				queueManager.enqueuePlayClient(client);
+			if(!isUniqueQueue){
+				if (!queueManager.playQueueIsEmpty()
+						&& queueManager.paymentQueueIsEmpty()) {
+					queueManager.enqueuePaymentClient(client);
+				}else{
+					queueManager.enqueuePlayClient(client);
+				}
 			}
+			else{
+				queueManager.enqueuePaymentClient(client);
+			}
+			
 			client.type = Client.Type.PLAY;
 			
 		}
@@ -119,12 +133,18 @@ public class Activity {
 		if(client == null){
 			return;
 		}
-		if(client.isInCashPayment){
-			services.freeFirstBusyPaymentCash();
+		if(!isUniqueQueue){
+			if(client.isInCashPayment){
+				services.freeFirstBusyPaymentCash();
+			}
+			else{
+				services.freeFirstBusyPlayCash();
+			}
 		}
 		else{
-			services.freeFirstBusyPlayCash();
+			services.freeFirstBusyPaymentCash();
 		}
+		
 		client.end = simTime;
 		dataCollector.addClient(client);
 	}
@@ -172,11 +192,19 @@ public class Activity {
 
 
 	public void executeActivity() {
-		this.arriveClient();
-		this.endPaymentService();
-		this.endPlayService();
-		this.startPaymentCashService();
-		this.startPlayCashService();
+		if(!isUniqueQueue){
+			this.arriveClient();
+			this.endPaymentService();
+			this.endPlayService();
+			this.startPaymentCashService();
+			this.startPlayCashService();
+		}
+		else{
+			this.arriveClient();
+			this.endPaymentService();
+			this.startPaymentCashService();
+		}
+		
 	}
 
 	public double getTime() {
