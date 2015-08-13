@@ -16,7 +16,7 @@ public class Activity {
 	private static final double PAYMENT_AND_PLAY_VARIANCE = 2;
 
 
-	private static final double paymentPorcentage = 0.3;
+	private static final double paymentPorcentage = 0.1;
 	private static final double playAndPaymentPorcentage = 0.4;
 
 	private static AvailableServices services = AvailableServices
@@ -44,7 +44,7 @@ public class Activity {
 		if (random < paymentPorcentage) {
 			if (!queueManager.paymentQueueIsEmpty()
 					&& queueManager.playQueueIsEmpty()) {
-				queueManager.enqueuePaymentClient(client);
+				queueManager.enqueuePlayClient(client);
 			} else {
 				queueManager.enqueuePaymentClient(client);
 			}
@@ -58,7 +58,7 @@ public class Activity {
 		} else {
 			if (!queueManager.playQueueIsEmpty()
 					&& queueManager.paymentQueueIsEmpty()) {
-				queueManager.enqueuePlayClient(client);
+				queueManager.enqueuePaymentClient(client);
 			}else{
 				queueManager.enqueuePlayClient(client);
 			}
